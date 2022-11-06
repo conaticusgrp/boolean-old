@@ -23,7 +23,7 @@ If you have all the requirements for hosting the bot, please follow the next ste
 
 1. Clone this repository to your computer, or to your vps.
 ```
-git clone https://github.com/conaticus/boolean.git
+git clone https://github.com/conaticusgrp/boolean
 ```
 
 2. Copy the contents of the `.env.example` file to the `.env` file and fill in the values. (Make sure you have declared the bots token in the `.env` file!)
