@@ -1,0 +1,11 @@
+services:
+    postgres:
+        image: postgres:14.2-alpine
+    boolean:
+        build:
+            context: .
+            dockerfile: Dockerfile
+            target: development
+        restart: unless-stopped
+        depends_on:
+            - postgres

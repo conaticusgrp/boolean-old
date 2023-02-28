@@ -8,10 +8,12 @@ services:
             - "boolean-data:/var/lib/postgresql/data/pgdata"
     boolean:
         build: .
+        environment:
+            - DATABASE_URL=postgresql://postgres:supersecurepassword@postgres/postgres?schema=boolean
         env_file:
             - .env
-        restart: always
-        links:
+        restart: unless-stopped 
+        depends_on:
             - postgres
 volumes:
     boolean-data: {}

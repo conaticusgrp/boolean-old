@@ -1,21 +1,20 @@
-FROM node:16-alpine AS base
+FROM node:17-alpine AS base
 
 WORKDIR /opt/app
-COPY package.json /opt/app
-
+COPY package*.json .
 RUN npm install
+COPY . .
 
-FROM base AS build
+FROM base AS builder
 
-COPY . /opt/app
-RUN sh ./scripts/build.sh
+RUN npm exec prisma generate
+RUN npm run build
 
-FROM base as production
+FROM builder as development
 
-COPY --from=build /opt/app/package.json /opt/app/package.json
-COPY --from=build /opt/app/node_modules /opt/app/node_modules
-COPY --from=build /opt/app/dist /opt/app/dist
-COPY --from=build /opt/app/scripts /opt/app/scripts
-COPY --from=build /opt/app/prisma /opt/app/prisma
+RUN apk add git
+CMD npm run dev
 
-CMD sh ./scripts/start.sh
+FROM builder as production
+
+CMD npm run start

@@ -5,8 +5,8 @@ const walk = (
     pathLike: fs.PathLike,
     options?:
         | {
-            encoding: BufferEncoding | null;
-        }
+              encoding: BufferEncoding | null;
+          }
         | BufferEncoding
         | null
         | undefined
@@ -26,12 +26,12 @@ const walk = (
     return results;
 };
 
-const commandFiles = walk(path.join(__dirname, "commands")).filter((file) =>
-    [".ts", ".js"].some((ext) => file.endsWith(ext))
-);
+export const getCommandFiles = () =>
+    walk(path.join(__dirname, "commands")).filter((file) =>
+        [".ts", ".js"].some((ext) => file.endsWith(ext))
+    );
 
-const eventFiles = walk(path.join(__dirname, "events")).filter((file) =>
-    [".ts", ".js"].some((ext) => file.endsWith(ext))
-);
-
-export { commandFiles, eventFiles };
+export const getEventFiles = () =>
+    walk(path.join(__dirname, "events")).filter((file) =>
+        [".ts", ".js"].some((ext) => file.endsWith(ext))
+    );

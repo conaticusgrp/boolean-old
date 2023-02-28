@@ -1,6 +1,6 @@
 import { Client, Collection, GuildAuditLogsEntry, Intents } from "discord.js";
 
-import { eventFiles } from "../files";
+import { getEventFiles } from "../files";
 import { BotCommand, Logger } from "../structures";
 import { IBotEvent } from "../types";
 
@@ -62,31 +62,52 @@ export default class Bot extends Client<true> {
 
     async initModules() {
         const tasks: Promise<unknown>[] = [];
-        for (let i = 0; i < eventFiles.length; i += 1) {
-            const file = eventFiles[i];
-            const task = import(file);
-            task.then((module) => {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const event = module.default as IBotEvent<any>;
-                if (!event) {
-                    console.error(
-                        `File at path ${file} seems to incorrectly be exporting an event.`
-                    );
+        const eventFiles = getEventFiles();
+        const modules = await Promise.all(
+            eventFiles.map((file) => import(file))
+        );
+        modules.forEach((module) => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const event = module.default as IBotEvent<any>;
+            if (!event) {
+                return;
+            } else {
+                if (event.once) {
+                    this.once(event.eventName, event.run.bind(null, this));
                 } else {
-                    if (event.once) {
-                        this.once(event.eventName, event.run.bind(null, this));
-                    } else {
-                        this.on(event.eventName, event.run.bind(null, this));
-                    }
-                    this.logger.console.debug(
-                        `Registered event ${event.eventName}`
-                    );
+                    this.on(event.eventName, event.run.bind(null, this));
                 }
-            });
-            tasks.push(task);
-        }
+                this.logger.console.debug(
+                    `Registered event ${event.eventName}`
+                );
+            }
+        });
 
         await Promise.all(tasks);
         this.logger.console.info("Registering slash commands");
+    }
+
+    async register(cmds: BotCommand[]): Promise<void> {
+        // Register to a testing server
+        const payload = cmds.map((cmd) => cmd.data);
+        const devServer = process.env.DEV_SERVER;
+        if (devServer !== undefined) {
+            const guild = await this.guilds.fetch(devServer);
+            await guild.commands.set(payload);
+            this.logger.console.info(`Registered commands to ${devServer}`);
+            return;
+        }
+        // else... register globally
+
+        // clear dev commands
+        const tasks: Promise<unknown>[] = [];
+        this.guilds.cache.forEach((guild) => {
+            const task = guild.commands.set([]);
+            tasks.push(task);
+        });
+        await Promise.all(tasks).catch(() => null);
+        // register global commands
+        await this.application.commands.set(payload);
+        this.logger.console.info("Registered commands globally");
     }
 }
