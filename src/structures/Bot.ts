@@ -89,7 +89,10 @@ export default class Bot extends Client<true> {
 
     async register(cmds: BotCommand[]): Promise<void> {
         // Register to a testing server
-        const payload = cmds.map((cmd) => cmd.data);
+        const payload = cmds.map((cmd) => {
+            this.commands.set(cmd.data.name, cmd);
+            return cmd.data;
+        });
         const devServer = process.env.DEV_SERVER;
         if (devServer !== undefined) {
             const guild = await this.guilds.fetch(devServer);
