@@ -1,0 +1,14 @@
+services:
+    postgres:
+        image: postgres:14.2-alpine
+        environment:
+            POSTGRES_PASSWORD: boolean
+        ports:
+            - 5432:5432
+    boolean:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        restart: unless-stopped
+        depends_on:
+            - postgres
