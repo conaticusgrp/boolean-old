@@ -1,6 +1,7 @@
 <h1>Boolean</h1>
 
 ![Boolean's Picture](./docs/Boolean%20Pfp.png)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fconaticusgrp%2Fboolean.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fconaticusgrp%2Fboolean?ref=badge_shield)
 
 ## About
 Boolean is a Discord bot for the Conaticus' [Discord server](https://discord.gg/conaticus). Boolean contains a collection of useful modules for your server, like a mod mailing system, a custom role menu, etc. Want to see how Boolean was made? Watch the development process [here](https://www.youtube.com/watch?v=xq2jR3_msmk)
@@ -69,3 +70,7 @@ If you have any questions, please join the [Discord](https://discord.gg/conaticu
 ## Youtube
 
 If you like cool coding projects like this, subscribe to [Conaticus](https://www.youtube.com/channel/UCRLHJ-7b4pjDpBBHAUXEvjQ)
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fconaticusgrp%2Fboolean.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fconaticusgrp%2Fboolean?ref=badge_large)
