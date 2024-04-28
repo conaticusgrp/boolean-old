@@ -27,6 +27,14 @@ export default TypedEvent({
             member.guild.id,
             "welcomes"
         );
+
+        // This code is only valid in the conaticus server, therefore it can be removed if you are using a fork.
+        if (member.guild.id === 949566380523548672) {
+            const role = member.guild.roles.cache.find((role) => role.name === "Member");
+
+            member.roles.add(role);
+        };
+
         if (welcomeChannel !== null) {
             const txt = welcomeChannel as TextChannel;
             await txt.send({
